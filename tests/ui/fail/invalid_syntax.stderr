@@ -1,0 +1,5 @@
+error: in_place! : l'expression doit être un appel de fonction, ex: `my_func($f1i, "arg", $f1o)`
+ --> tests/ui/fail/invalid_syntax.rs:4:15
+  |
+4 |     in_place!(meow);
+  |               ^^^^
