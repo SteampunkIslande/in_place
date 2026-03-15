@@ -43,7 +43,7 @@ pub fn codegen(ir: IR) -> TokenStream {
             let original = rename.original_ident;
             let overwrites = rename.overwrites_ident;
             quote! {
-                ::std::fs::rename(&#overwrites, #original).unwrap();
+                ::std::fs::rename(&#overwrites, #original)?;
             }
         })
         .collect();
