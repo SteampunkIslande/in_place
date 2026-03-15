@@ -14,6 +14,6 @@ pub fn auto_rename(attr: TokenStream, item: TokenStream) -> TokenStream {
 #[proc_macro]
 #[proc_macro_error]
 pub fn sponge(input: TokenStream) -> TokenStream {
-    use crate::sponge_functionlike::generate;
-    input
+    use crate::sponge_functionlike::{codegen, parse};
+    codegen(parse(input.into()).unwrap_or_abort()).into()
 }

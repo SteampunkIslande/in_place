@@ -3,7 +3,7 @@ use quote::{format_ident, quote};
 
 use crate::sponge_functionlike::parse::{Arg, SpongeCall};
 
-pub fn generate(call: SpongeCall) -> TokenStream {
+pub fn codegen(call: SpongeCall) -> TokenStream {
     let func = call.func;
 
     let mut setup = Vec::new();

@@ -61,7 +61,7 @@ impl Parse for SpongeCall {
         syn::parenthesized!(content in input);
 
         let raw_args: Punctuated<RawArg, Token![,]> =
-            content.parse_terminated(RawArg::parse, Token![,])?;
+            Punctuated::<RawArg, Token![,]>::parse_terminated(&content)?;
 
         let args = raw_args
             .into_iter()
@@ -76,12 +76,6 @@ impl Parse for SpongeCall {
     }
 }
 
-pub fn parse(attr: TokenStream, item: TokenStream) -> Result<SpongeCall> {
-    let ParsedFunctionParts { body, signature } = syn::parse2::<ParsedFunctionParts>(item)?;
-    let attr = syn::parse2::<Renames>(attr)?;
-    Ok(IR {
-        attr,
-        body,
-        signature,
-    })
+pub fn parse(input: TokenStream) -> Result<SpongeCall> {
+    syn::parse2::<SpongeCall>(input)
 }
