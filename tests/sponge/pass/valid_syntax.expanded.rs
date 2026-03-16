@@ -23,7 +23,7 @@ fn run() -> Result<()> {
         match aggregate_parquets(
             "original.parquet",
             "incoming.parquet",
-            &__sponge_tmp_2,
+            __sponge_tmp_2.as_path(),
         ) {
             Ok(__sponge_ok) => {
                 ::std::fs::rename(&__sponge_tmp_2, "original.parquet")?;

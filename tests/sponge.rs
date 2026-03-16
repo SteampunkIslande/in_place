@@ -84,7 +84,7 @@ mod sponge_unit_test {
     /// en sortie écrit d'abord dans un fichier temporaire, puis le renomme à la
     /// place de l'original : le contenu est modifié comme attendu.
     #[test]
-    fn test_same_file_with_macro_edits_correctly() {
+    fn test_same_file_with_macro_edits_correctly() -> std::io::Result<()> {
         let temp = create_temp_file_with_content(
             (0..10)
                 .map(|i| format!("This is line {}", i))
@@ -94,8 +94,7 @@ mod sponge_unit_test {
         );
         let path = temp.path();
 
-        (|| -> std::io::Result<()> { sponge!(file_edit(path, overwrites path)) })()
-            .expect("file_edit_inplace should not return an error");
+        sponge!(file_edit(path, path)).expect("file_edit_inplace should not return an error");
 
         let content = std::fs::read_to_string(path).unwrap();
         assert_eq!(
@@ -110,5 +109,6 @@ mod sponge_unit_test {
             ),
             "With macro, the file should be correctly modified"
         );
+        Ok(())
     }
 }
