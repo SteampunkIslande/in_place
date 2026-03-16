@@ -1,7 +1,8 @@
 use in_place::auto_rename;
+use std::path::Path;
 
 #[auto_rename(output overwrites input)]
-pub fn file_edit_inplace(input: &str, output: &str) -> std::io::Result<()> {
+pub fn file_edit_inplace(input: &Path, output: &Path) -> std::io::Result<()> {
     use std::fs::File;
     use std::io::{BufRead, BufReader, Write};
     let infile = File::open(input)?;
@@ -17,7 +18,7 @@ pub fn file_edit_inplace(input: &str, output: &str) -> std::io::Result<()> {
 }
 
 fn run() -> std::io::Result<()> {
-    file_edit_inplace("A.csv", "A.csv")
+    file_edit_inplace(std::path::Path::new("A.csv"), std::path::Path::new("A.csv"))
 }
 
 fn main() {

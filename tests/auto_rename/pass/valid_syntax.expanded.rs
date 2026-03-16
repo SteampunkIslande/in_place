@@ -1,5 +1,6 @@
 use in_place::auto_rename;
-pub fn file_edit_inplace(input: &str, output: &str) -> std::io::Result<()> {
+use std::path::Path;
+pub fn file_edit_inplace(input: &Path, output: &Path) -> std::io::Result<()> {
     let output: ::std::path::PathBuf = {
         let __p: &::std::path::Path = ::std::convert::AsRef::<
             ::std::path::Path,
@@ -29,7 +30,7 @@ pub fn file_edit_inplace(input: &str, output: &str) -> std::io::Result<()> {
     Ok(())
 }
 fn run() -> std::io::Result<()> {
-    file_edit_inplace("A.csv", "A.csv")
+    file_edit_inplace(std::path::Path::new("A.csv"), std::path::Path::new("A.csv"))
 }
 fn main() {
     let _ = run;

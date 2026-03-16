@@ -1,18 +1,14 @@
 use in_place::sponge;
 use std::io::Result;
 use std::path::Path;
-use std::path::PathBuf;
 fn aggregate_parquets(_original: &Path, _incoming: &Path, _output: &Path) -> Result<()> {
     Ok(())
 }
 fn run() -> Result<()> {
-    let original_path = PathBuf::from("original.parquet");
-    let incoming_path = PathBuf::from("incoming.parquet");
-    let output_path = PathBuf::from("original.parquet");
     {
-        let __sponge_arg_0 = original_path.as_path();
-        let __sponge_arg_1 = incoming_path.as_path();
-        let __sponge_arg_2 = output_path.as_path();
+        let __sponge_arg_0 = Path::new("original.parquet");
+        let __sponge_arg_1 = Path::new("incoming.parquet");
+        let __sponge_arg_2 = Path::new("original.parquet");
         let __sponge_tmp_2: ::std::path::PathBuf = {
             let __p: &::std::path::Path = ::std::convert::AsRef::<
                 ::std::path::Path,
@@ -42,9 +38,9 @@ fn run() -> Result<()> {
             Err(__sponge_err) => Err(__sponge_err),
         }
     }?;
-    let original = original_path.as_path();
-    let incoming = incoming_path.as_path();
-    let output = output_path.as_path();
+    let original = Path::new("original.parquet");
+    let incoming = Path::new("incoming.parquet");
+    let output = Path::new("original.parquet");
     {
         let __sponge_arg_0 = original;
         let __sponge_arg_1 = incoming;

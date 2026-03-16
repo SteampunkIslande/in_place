@@ -29,6 +29,8 @@ mod auto_rename_macrotest_test {
 #[cfg(test)]
 mod autorename_unit_test {
 
+    use std::path::Path;
+
     use in_place::auto_rename;
 
     pub fn file_edit(input: &str, output: &str) -> std::io::Result<()> {
@@ -48,7 +50,7 @@ mod autorename_unit_test {
     }
 
     #[auto_rename(output overwrites input)]
-    pub fn file_edit_inplace(input: &str, output: &str) -> std::io::Result<()> {
+    pub fn file_edit_inplace(input: &Path, output: &Path) -> std::io::Result<()> {
         use std::fs::File;
         use std::io::{BufRead, BufReader, Write};
         let infile = File::open(input)?;
@@ -108,7 +110,7 @@ mod autorename_unit_test {
                 .join("\n")
                 .as_str(),
         );
-        let path = temp.path().to_str().unwrap();
+        let path = temp.path();
 
         file_edit_inplace(path, path).expect("file_edit_inplace should not return an error");
 
