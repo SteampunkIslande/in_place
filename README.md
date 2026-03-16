@@ -9,6 +9,14 @@ This is the point of the [sponge](https://joeyh.name/code/moreutils/#:~:text=Pro
 
 Using this crate in rust, you now have two ways to write code that edits a file in-place.
 
+# Why use this crate
+
+There are three typical scenarios in which you may wish you could edit a file in-place.
+
+- You're writing your own, brand new function, and realize that your input **file** should be overwritten by your output **file**. In this case, don't use this crate! Instead, use [this one](https://crates.io/crates/in-place).
+- You've already written tens of functions that all take two different files as input and output, and for some reason, you're only realizing now that you need the output to overwrite the input. That's fine, you can use this crate. And more specifically, I would advise you to pick the [`#[auto_rename]` macro_attribute](#using-the-auto_rename-macro_attribute) which I find more convenient.
+- You're using someone else's crate, and their API uses functions that take `Path`s as inputs and as outputs, but there is no other way of safely editing the files in-place, besides the tedious, manual, rename before, rename after, don't mess up the order. For this use case, since you cannot decorate their functions with a macro_attribute (unless you wrap them yourself), you can still use this [convenient function-like macro](#using-the-sponge-function-like-macro).
+
 # Using the `#[auto_rename]` macro_attribute
 
 Say you define a function that takes input and output as files:
@@ -17,7 +25,7 @@ Say you define a function that takes input and output as files:
 use in_place::auto_rename;
 
 #[auto_rename(output overwrites input)]
-pub fn file_edit_inplace(input: &str, output: &str) -> std::io::Result<()> {
+pub fn file_edit_inplace(input: &Path, output: &Path) -> std::io::Result<()> {
     use std::fs::File;
     use std::io::{BufRead, BufReader, Write};
     let infile = File::open(input)?;
