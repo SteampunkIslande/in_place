@@ -1,19 +1,23 @@
-use in_place::sponge;
-use std::path::Path;
+use in_place::auto_rename;
 
-#[derive(Debug)]
-struct PipelineError {}
+#[auto_rename(output overwrites input)]
+pub fn file_edit_inplace(input: &str, output: &str) -> std::io::Result<()> {
+    use std::fs::File;
+    use std::io::{BufRead, BufReader, Write};
+    let infile = File::open(input)?;
 
-fn aggregate_parquets(
-    _original: &Path,
-    _incoming: &Path,
-    _output: &Path,
-) -> Result<(), PipelineError> {
-    Ok(())
+    let mut outfile = File::create(&output)?;
+
+    let reader = BufReader::new(infile);
+
+    for (i, line) in reader.lines().enumerate() {
+        let line = line?;
+        writeln!(outfile, "{}: {}", i + 1, line)?;
+    }
 }
 
-fn run() -> Result<(), PipelineError> {
-    sponge!(aggregate_parquets(< "original.parquet", "incoming.parquet".as_ref(), > "output.parquet"))
+fn run() -> std::io::Result<()> {
+    file_edit_inplace("A.csv", "A.csv")
 }
 
 fn main() {

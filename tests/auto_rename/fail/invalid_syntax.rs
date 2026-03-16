@@ -1,7 +1,6 @@
 use in_place::auto_rename;
-use std::path::Path;
 
-#[auto_rename(output to input)]
+#[auto_rename(output input)]
 pub fn file_edit_inplace(input: &str, output: &str) -> std::io::Result<()> {
     use std::fs::File;
     use std::io::{BufRead, BufReader, Write};

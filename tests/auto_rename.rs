@@ -5,14 +5,14 @@ mod auto_rename_try_build_test {
     #[test]
     fn auto_rename_pass() {
         let t = trybuild::TestCases::new();
-        t.pass("tests/auto_rename/pass/*.rs");
+        t.pass("tests/auto_rename/pass/valid_syntax.rs");
     }
 
     /// Ensure the code doesn't compile with invalid syntax
     #[test]
     fn auto_rename_fail() {
         let t = trybuild::TestCases::new();
-        t.compile_fail("tests/auto_rename/fail/*.rs");
+        t.compile_fail("tests/auto_rename/fail/invalid_syntax.rs");
     }
 }
 
@@ -30,6 +30,7 @@ mod auto_rename_macrotest_test {
 mod autorename_unit_test {
 
     use in_place::auto_rename;
+
     pub fn file_edit(input: &str, output: &str) -> std::io::Result<()> {
         use std::fs::File;
         use std::io::{BufRead, BufReader, Write};
@@ -46,7 +47,7 @@ mod autorename_unit_test {
         Ok(())
     }
 
-    #[auto_rename(output to input)]
+    #[auto_rename(output overwrites input)]
     pub fn file_edit_inplace(input: &str, output: &str) -> std::io::Result<()> {
         use std::fs::File;
         use std::io::{BufRead, BufReader, Write};
@@ -113,7 +114,15 @@ mod autorename_unit_test {
 
         let content = std::fs::read_to_string(path).unwrap();
         assert_eq!(
-            content, "1: hello\n2: world\n",
+            content,
+            format!(
+                "{}\n",
+                (0..10)
+                    .map(|i| format!("{}: This is line {}", i + 1, i))
+                    .collect::<Vec<String>>()
+                    .join("\n")
+                    .as_str(),
+            ),
             "With macro, the file should be correctly modified"
         );
     }
