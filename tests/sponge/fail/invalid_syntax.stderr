@@ -1,0 +1,7 @@
+error: unexpected end of input, expected parentheses
+ --> tests/sponge/fail/invalid_syntax.rs:4:5
+  |
+4 |     sponge!(meow);
+  |     ^^^^^^^^^^^^^
+  |
+  = note: this error originates in the macro `sponge` (in Nightly builds, run with -Z macro-backtrace for more info)

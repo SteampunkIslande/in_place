@@ -1,19 +1,13 @@
 use in_place::sponge;
+use std::io::Result;
 use std::path::Path;
 
-#[derive(Debug)]
-struct PipelineError {}
-
-fn aggregate_parquets(
-    _original: &Path,
-    _incoming: &Path,
-    _output: &Path,
-) -> Result<(), PipelineError> {
+fn aggregate_parquets(_original: &Path, _incoming: &Path, _output: &Path) -> Result<()> {
     Ok(())
 }
 
-fn run() -> Result<(), PipelineError> {
-    sponge!(aggregate_parquets(< "original.parquet", "incoming.parquet".as_ref(), > "output.parquet"))
+fn run() -> Result<()> {
+    sponge!(aggregate_parquets("original.parquet", "incoming.parquet", overwrites "original.parquet"))
 }
 
 fn main() {

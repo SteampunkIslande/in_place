@@ -1,5 +1,5 @@
 use proc_macro2::TokenStream;
-use proc_macro_error::{abort, OptionExt};
+use proc_macro_error::OptionExt;
 use syn::{
     parse::{Parse, ParseStream},
     punctuated::Punctuated,
@@ -19,11 +19,18 @@ pub enum Arg {
 
 impl Parse for Arg {
     fn parse(input: ParseStream) -> Result<Self> {
-        if input.parse::<Ident>()?.to_string() != "overwrites" {
-            Ok(Arg::Simple(input.parse()?))
-        } else {
-            Ok(Arg::Overwrites(input.parse()?))
+        // Use a fork to peek without consuming the original input
+        let fork = input.fork();
+        if let Ok(ident) = fork.parse::<Ident>() {
+            if ident.to_string() == "overwrites" {
+                // consume the keyword from the real stream
+                let _kw: Ident = input.parse()?;
+                // then parse the following expression
+                return Ok(Arg::Overwrites(input.parse()?));
+            }
         }
+
+        Ok(Arg::Simple(input.parse()?))
     }
 }
 
