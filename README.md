@@ -9,6 +9,10 @@ This is the point of the [sponge](https://joeyh.name/code/moreutils/#:~:text=Pro
 
 Using this crate in rust, you now have two ways to write code that edits a file in-place.
 
+# Disclaimer
+
+This crate is **not** production-ready yet, please feel free to open an issue or a PR if you find either a bug, a solution to it, or both.
+
 # Why use this crate
 
 There are three typical scenarios in which you may wish you could edit a file in-place.
