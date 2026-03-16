@@ -1,8 +1,12 @@
 [package]
 name = "in_place"
 version = "0.1.0"
+license = "MIT"
 edition = "2021"
 authors = ["SteampunkIslande <charles.monod-broca@neuf.fr>"]
+repository = "https://github.com/SteampunkIslande/in_place"
+readme = "README.md"
+description = "A Rust crate for in-place file editing with automatic renaming and backup support."
 
 [lib]
 proc-macro = true
