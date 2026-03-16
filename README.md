@@ -2,6 +2,7 @@ Macros for in-place file manipulations
 ===========================
 ![Repo](https://img.shields.io/badge/github-in_place-blue?style=for-the-badge&logo=github&link=https%3A%2F%2Fgithub.com%2FSteampunkIslande%2Fin_place)
 ![Build status](https://img.shields.io/github/actions/workflow/status/SteampunkIslande/in_place/ci.yaml?style=for-the-badge)
+![Published on crates.io](https://img.shields.io/crates/v/in_place_macro?style=for-the-badge)
 
 Are you tired of always having to write that same old code, over and over again, everytime you need a file to be edited in-place in a streaming fashion ?
 
