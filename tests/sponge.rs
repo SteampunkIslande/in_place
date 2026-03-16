@@ -93,11 +93,13 @@ mod sponge_unit_test {
                 .as_str(),
         )
         .expect("Cannot get temp file");
-        let path = temp.path();
+        let input = temp.path();
+        let output = temp.path();
 
-        sponge!(file_edit(path, path)).expect("file_edit_inplace should not return an error");
+        sponge!(file_edit(input, output), output overwrites input)
+            .expect("file_edit_inplace should not return an error");
 
-        let content = std::fs::read_to_string(path).unwrap();
+        let content = std::fs::read_to_string(input).unwrap();
         assert_eq!(
             content,
             format!(

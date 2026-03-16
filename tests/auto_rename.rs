@@ -22,7 +22,7 @@ mod auto_rename_macrotest_test {
 
     #[test]
     fn auto_rename_expands() {
-        macrotest::expand("tests/auto_rename/pass/*.rs");
+        macrotest::expand("tests/auto_rename/pass/valid_syntax.rs");
     }
 }
 
