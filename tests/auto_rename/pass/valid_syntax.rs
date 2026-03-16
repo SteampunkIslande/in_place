@@ -1,4 +1,4 @@
-use in_place::in_place;
+use in_place::sponge;
 use std::path::Path;
 
 #[derive(Debug)]
@@ -13,7 +13,7 @@ fn aggregate_parquets(
 }
 
 fn run() -> Result<(), PipelineError> {
-    in_place!(f1 = "original.parquet", aggregate_parquets($f1i, "incoming.parquet".as_ref(), $f1o))
+    sponge!(aggregate_parquets(< "original.parquet", "incoming.parquet".as_ref(), > "output.parquet"))
 }
 
 fn main() {

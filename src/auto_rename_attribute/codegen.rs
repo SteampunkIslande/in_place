@@ -1,4 +1,4 @@
-use crate::in_place_attribute::parse::IR;
+use crate::auto_rename_attribute::parse::IR;
 
 use proc_macro2::TokenStream;
 use quote::quote;

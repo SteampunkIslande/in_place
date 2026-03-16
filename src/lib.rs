@@ -1,13 +1,13 @@
 use proc_macro::TokenStream;
 use proc_macro_error::{proc_macro_error, ResultExt};
 
-mod in_place_attribute;
+mod auto_rename_attribute;
 mod sponge_functionlike;
 
 #[proc_macro_attribute]
 #[proc_macro_error]
 pub fn auto_rename(attr: TokenStream, item: TokenStream) -> TokenStream {
-    use crate::in_place_attribute::{codegen, parse};
+    use crate::auto_rename_attribute::{codegen, parse};
     codegen(parse(attr.into(), item.into()).unwrap_or_abort()).into()
 }
 

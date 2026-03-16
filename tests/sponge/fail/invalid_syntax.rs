@@ -1,7 +1,7 @@
-use in_place::in_place;
+use in_place::sponge;
 
 fn run() {
-    in_place!(meow);
+    sponge!(meow);
 }
 
 fn main() {
