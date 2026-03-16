@@ -29,7 +29,7 @@ mod sponge_macrotest_test {
 #[cfg(test)]
 mod sponge_unit_test {
 
-    use in_place::sponge;
+    use in_place_macro::sponge;
 
     pub fn file_edit(input: &std::path::Path, output: &std::path::Path) -> std::io::Result<()> {
         use std::fs::File;

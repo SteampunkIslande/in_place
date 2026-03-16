@@ -31,7 +31,7 @@ mod autorename_unit_test {
 
     use std::path::Path;
 
-    use in_place::auto_rename;
+    use in_place_macro::auto_rename;
 
     pub fn file_edit(input: &str, output: &str) -> std::io::Result<()> {
         use std::fs::File;

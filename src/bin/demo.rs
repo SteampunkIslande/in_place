@@ -2,7 +2,7 @@ use clap::{Parser, Subcommand};
 use std::fs::File;
 use std::io::{BufRead, BufReader, Write};
 
-use in_place::auto_rename;
+use in_place_macro::auto_rename;
 
 #[derive(Parser)]
 #[command(author, version, about)]

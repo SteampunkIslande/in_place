@@ -22,7 +22,7 @@ There are three typical scenarios in which you may wish you could edit a file in
 Say you define a function that takes input and output as files:
 
 ```rust
-use in_place::auto_rename;
+use in_place_macro::auto_rename;
 
 #[auto_rename(output overwrites input)]
 pub fn file_edit_inplace(input: &Path, output: &Path) -> std::io::Result<()> {
@@ -60,7 +60,7 @@ The `sponge!` macro is designed for when you have an existing function that you 
 ## With keyword arguments
 
 ```rust
-use in_place::sponge;
+use in_place_macro::sponge;
 use std::io::Result;
 use std::path::Path;
 use std::path::PathBuf;
@@ -90,7 +90,7 @@ fn run() -> Result<()> {
 If you use simple identifiers as arguments, you can use a shorter syntax:
 
 ```rust
-use in_place::sponge;
+use in_place_macro::sponge;
 use std::io::Result;
 use std::path::Path;
 use std::path::PathBuf;

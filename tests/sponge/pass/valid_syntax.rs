@@ -1,4 +1,4 @@
-use in_place::sponge;
+use in_place_macro::sponge;
 use std::io::Result;
 use std::path::Path;
 

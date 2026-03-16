@@ -1,4 +1,4 @@
-use in_place::auto_rename;
+use in_place_macro::auto_rename;
 
 #[auto_rename(output input)]
 pub fn file_edit_inplace(input: &str, output: &str) -> std::io::Result<()> {

@@ -1,4 +1,4 @@
-use in_place::auto_rename;
+use in_place_macro::auto_rename;
 use std::path::Path;
 pub fn file_edit_inplace(input: &Path, output: &Path) -> std::io::Result<()> {
     let output: ::std::path::PathBuf = {

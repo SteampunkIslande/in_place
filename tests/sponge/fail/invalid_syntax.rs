@@ -1,4 +1,4 @@
-use in_place::sponge;
+use in_place_macro::sponge;
 
 fn run() {
     sponge!(meow);

@@ -1,4 +1,4 @@
-use in_place::auto_rename;
+use in_place_macro::auto_rename;
 use std::path::Path;
 
 #[auto_rename(output overwrites input)]
