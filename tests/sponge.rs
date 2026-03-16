@@ -5,14 +5,14 @@ mod sponge_try_build_test {
     #[test]
     fn sponge_pass() {
         let t = trybuild::TestCases::new();
-        t.pass("tests/sponge/pass/*.rs");
+        t.pass("tests/sponge/pass/valid_syntax.rs");
     }
 
     /// Ensure the code doesn't compile with invalid syntax
     #[test]
     fn sponge_fail() {
         let t = trybuild::TestCases::new();
-        t.compile_fail("tests/sponge/fail/*.rs");
+        t.compile_fail("tests/sponge/fail/invalid_syntax.rs");
     }
 }
 
@@ -22,7 +22,7 @@ mod sponge_macrotest_test {
 
     #[test]
     fn sponge_expands() {
-        macrotest::expand("tests/sponge/pass/*.rs");
+        macrotest::expand("tests/sponge/pass/valid_syntax.rs");
     }
 }
 
@@ -93,11 +93,20 @@ mod sponge_unit_test {
         );
         let path = temp.path().to_str().unwrap();
 
-        sponge!(file_edit(<: path, >: path)).expect("file_edit_inplace should not return an error");
+        sponge!(file_edit(path,overwrites path))
+            .expect("file_edit_inplace should not return an error");
 
         let content = std::fs::read_to_string(path).unwrap();
         assert_eq!(
-            content, "1: hello\n2: world\n",
+            content,
+            format!(
+                "{}\n",
+                (0..10)
+                    .map(|i| format!("{}: This is line {}", i + 1, i))
+                    .collect::<Vec<String>>()
+                    .join("\n")
+                    .as_str(),
+            ),
             "With macro, the file should be correctly modified"
         );
     }

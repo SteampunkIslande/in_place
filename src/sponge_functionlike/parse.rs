@@ -1,75 +1,28 @@
 use proc_macro2::TokenStream;
+use proc_macro_error::{abort, OptionExt};
 use syn::{
     parse::{Parse, ParseStream},
     punctuated::Punctuated,
-    spanned::Spanned,
     Expr, Ident, Path, Result, Token,
 };
 
-pub enum Arg {
-    Expr(Expr),
-    Input(Option<Ident>, Expr),
-    Output(Option<Ident>, Expr),
-}
-
 pub struct SpongeCall {
+    pub func_path: Option<Path>,
     pub func: Ident,
     pub args: Vec<Arg>,
 }
 
-struct RawArg {
-    kind: ArgKind,
-    label: Option<Ident>,
-    expr: Expr,
+pub enum Arg {
+    Simple(Expr),
+    Overwrites(Expr),
 }
 
-enum ArgKind {
-    Normal,
-    Input,
-    Output,
-}
-
-impl Parse for RawArg {
+impl Parse for Arg {
     fn parse(input: ParseStream) -> Result<Self> {
-        if input.peek(Token![<]) {
-            input.parse::<Token![<]>()?;
-            let label = if input.peek(Ident) {
-                Some(input.parse::<Ident>()?)
-            } else {
-                None
-            };
-            if input.peek(Token![:]) {
-                input.parse::<Token![:]>()?;
-            }
-            let expr: Expr = input.parse()?;
-            Ok(Self {
-                kind: ArgKind::Input,
-                label,
-                expr,
-            })
-        } else if input.peek(Token![>]) {
-            input.parse::<Token![>]>()?;
-            let label = if input.peek(Ident) {
-                Some(input.parse::<Ident>()?)
-            } else {
-                None
-            };
-            if input.peek(Token![:]) {
-                input.parse::<Token![:]>()?;
-            }
-            let expr: Expr = input.parse()?;
-            Ok(Self {
-                kind: ArgKind::Output,
-                label,
-                expr,
-            })
+        if input.parse::<Ident>()?.to_string() != "overwrites" {
+            Ok(Arg::Simple(input.parse()?))
         } else {
-            let expr: Expr = input.parse()?;
-            Ok(Self {
-                kind: ArgKind::Normal,
-                label: None,
-                expr,
-            })
+            Ok(Arg::Overwrites(input.parse()?))
         }
     }
 }
@@ -78,26 +31,28 @@ impl Parse for SpongeCall {
     fn parse(input: ParseStream) -> Result<Self> {
         let func_path: Path = input.parse()?;
         let func = func_path
-            .get_ident()
-            .ok_or_else(|| syn::Error::new(func_path.span(), "Expected a simple function name"))?
+            .segments
+            .last()
+            .expect_or_abort("Doesn't make sense, a path should have at least one segment...")
+            .ident
             .clone();
 
         let content;
         syn::parenthesized!(content in input);
 
-        let raw_args: Punctuated<RawArg, Token![,]> =
-            Punctuated::<RawArg, Token![,]>::parse_terminated(&content)?;
-
-        let args = raw_args
+        let args: Vec<Arg> = Punctuated::<Arg, Token![,]>::parse_terminated(&content)?
             .into_iter()
-            .map(|a| match a.kind {
-                ArgKind::Normal => Arg::Expr(a.expr),
-                ArgKind::Input => Arg::Input(a.label, a.expr),
-                ArgKind::Output => Arg::Output(a.label, a.expr),
-            })
             .collect();
 
-        Ok(SpongeCall { func, args })
+        Ok(SpongeCall {
+            func_path: (if func_path.get_ident().is_some() {
+                None
+            } else {
+                Some(func_path)
+            }),
+            func,
+            args,
+        })
     }
 }
 
