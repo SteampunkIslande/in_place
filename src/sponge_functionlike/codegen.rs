@@ -36,7 +36,7 @@ pub fn codegen(call: SpongeCall) -> TokenStream {
                     ::std::fs::rename(&#tmp_ident, #e)?;
                 });
 
-                call_args.push(quote! { &#tmp_ident });
+                call_args.push(quote! { #tmp_ident.as_path() });
             }
         }
     }
