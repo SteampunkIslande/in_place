@@ -47,13 +47,12 @@ mod sponge_unit_test {
         Ok(())
     }
 
-    fn create_temp_file_with_content(content: &str) -> tempfile::NamedTempFile {
+    fn create_temp_file_with_content(content: &str) -> std::io::Result<tempfile::NamedTempFile> {
         use std::io::Write;
-        let mut file = tempfile::NamedTempFile::new().expect("Failed to create temp file");
-        file.write_all(content.as_bytes())
-            .expect("Failed to write to temp file");
-        file.flush().expect("Failed to flush temp file");
-        file
+        let mut file = tempfile::NamedTempFile::new()?;
+        file.write_all(content.as_bytes())?;
+        file.flush()?;
+        Ok(file)
     }
 
     /// Sans la macro, appeler file_edit avec le même chemin en entrée et en sortie
@@ -67,7 +66,8 @@ mod sponge_unit_test {
                 .collect::<Vec<String>>()
                 .join("\n")
                 .as_str(),
-        );
+        )
+        .expect("Cannot get temp file");
         let path = temp.path();
 
         file_edit(path, path).expect("file_edit should not return an error");
@@ -91,7 +91,8 @@ mod sponge_unit_test {
                 .collect::<Vec<String>>()
                 .join("\n")
                 .as_str(),
-        );
+        )
+        .expect("Cannot get temp file");
         let path = temp.path();
 
         sponge!(file_edit(path, path)).expect("file_edit_inplace should not return an error");
