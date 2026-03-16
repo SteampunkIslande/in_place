@@ -23,7 +23,7 @@ jobs:
         run: cargo test --verbose
       - name: Generate coverage
         run: |
-          cargo install tarpaulin
+          cargo install cargo-tarpaulin
           cargo tarpaulin --out Xml --output-dir coverage
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
