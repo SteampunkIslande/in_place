@@ -64,7 +64,7 @@ pub fn codegen(call: SpongeCall) -> TokenStream {
     }
 
     let call_path = if let Some(p) = func_path {
-        quote! { #p::#func }
+        quote! { #p #func }
     } else {
         quote! { #func }
     };

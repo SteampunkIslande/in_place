@@ -29,4 +29,12 @@ mod tests {
         emulate_attributelike_macro_expansion(file, &[("auto_rename", auto_rename_proc_macro2)])
             .unwrap();
     }
+
+    #[should_panic]
+    #[test]
+    fn code_coverage_panic() {
+        let file = fs::File::open("tests/auto_rename/fail/invalid_syntax.rs").unwrap();
+        emulate_attributelike_macro_expansion(file, &[("auto_rename", auto_rename_proc_macro2)])
+            .unwrap();
+    }
 }

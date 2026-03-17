@@ -26,10 +26,7 @@ mod sponge_macrotest_test {
     }
 }
 
-#[cfg(test)]
-mod sponge_unit_test {
-
-    use in_place_macro::sponge;
+pub mod helper {
 
     pub fn file_edit(input: &std::path::Path, output: &std::path::Path) -> std::io::Result<()> {
         use std::fs::File;
@@ -46,6 +43,11 @@ mod sponge_unit_test {
         }
         Ok(())
     }
+}
+#[cfg(test)]
+mod sponge_unit_test {
+
+    use in_place_macro::sponge;
 
     fn create_temp_file_with_content(content: &str) -> std::io::Result<tempfile::NamedTempFile> {
         use std::io::Write;
@@ -59,7 +61,7 @@ mod sponge_unit_test {
     /// corrompt le fichier : File::create tronque d'abord le fichier, puis
     /// File::open lit un fichier vide, ce qui produit une sortie vide.
     #[test]
-    fn test_same_file_without_macro_corrupts_file() {
+    fn test_same_file_without_macro_corrupts_file() -> std::io::Result<()> {
         let temp = create_temp_file_with_content(
             (0..10)
                 .map(|i| format!("This is line {}", i))
@@ -70,7 +72,7 @@ mod sponge_unit_test {
         .expect("Cannot get temp file");
         let path = temp.path();
 
-        file_edit(path, path).expect("file_edit should not return an error");
+        super::helper::file_edit(path, path).expect("file_edit should not return an error");
 
         let content = std::fs::read_to_string(path).unwrap();
         assert!(
@@ -78,6 +80,8 @@ mod sponge_unit_test {
             "Without the sponge macro, the file should be corrupted (empty): got {:?}",
             content
         );
+        temp.close()?;
+        Ok(())
     }
 
     /// Avec la macro, appeler file_edit_inplace avec le même chemin en entrée et
@@ -96,7 +100,8 @@ mod sponge_unit_test {
         let input = temp.path();
         let output = temp.path();
 
-        sponge!(file_edit(input, output), output overwrites input)
+        use super::helper::file_edit as fe;
+        sponge!(fe(input, output), output overwrites input)
             .expect("file_edit_inplace should not return an error");
 
         let content = std::fs::read_to_string(input).unwrap();
@@ -112,6 +117,40 @@ mod sponge_unit_test {
             ),
             "With macro, the file should be correctly modified"
         );
+        temp.close()?;
+        Ok(())
+    }
+
+    #[test]
+    fn test_same_file_with_macro_edits_correctly_with_function_path() -> std::io::Result<()> {
+        let temp = create_temp_file_with_content(
+            (0..10)
+                .map(|i| format!("This is line {}", i))
+                .collect::<Vec<String>>()
+                .join("\n")
+                .as_str(),
+        )
+        .expect("Cannot get temp file");
+        let input = temp.path();
+        let output = temp.path();
+
+        sponge!(super::helper::file_edit(input, output), output overwrites input)
+            .expect("file_edit_inplace should not return an error");
+
+        let content = std::fs::read_to_string(input).unwrap();
+        assert_eq!(
+            content,
+            format!(
+                "{}\n",
+                (0..10)
+                    .map(|i| format!("{}: This is line {}", i + 1, i))
+                    .collect::<Vec<String>>()
+                    .join("\n")
+                    .as_str(),
+            ),
+            "With macro, the file should be correctly modified"
+        );
+        temp.close()?;
         Ok(())
     }
 }

@@ -24,4 +24,11 @@ mod tests {
         let file = fs::File::open("tests/sponge/pass/valid_syntax.rs").unwrap();
         emulate_functionlike_macro_expansion(file, &[("sponge", sponge_proc_macro2)]).unwrap();
     }
+
+    #[should_panic]
+    #[test]
+    fn code_coverage_panic() {
+        let file = fs::File::open("tests/sponge/fail/invalid_syntax.rs").unwrap();
+        emulate_functionlike_macro_expansion(file, &[("sponge", sponge_proc_macro2)]).unwrap();
+    }
 }

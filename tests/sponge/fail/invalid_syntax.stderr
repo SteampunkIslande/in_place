@@ -1,7 +1,17 @@
-error: unexpected end of input, expected parentheses
- --> tests/sponge/fail/invalid_syntax.rs:4:5
-  |
-4 |     sponge!(meow);
-  |     ^^^^^^^^^^^^^
-  |
-  = note: this error originates in the macro `sponge` (in Nightly builds, run with -Z macro-backtrace for more info)
+error: expected identifier
+  --> tests/sponge/fail/invalid_syntax.rs:15:15
+   |
+15 |     ), output 42 original)?;
+   |               ^^
+
+error: positional arguments must be simple identifiers or use `name = expr` syntax
+  --> tests/sponge/fail/invalid_syntax.rs:22:52
+   |
+22 |     sponge!(aggregate_parquets(original, incoming, Path::new("original.parquet")), output overwrites original)?;
+   |                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error: expected `overwrites` keyword
+  --> tests/sponge/fail/invalid_syntax.rs:25:68
+   |
+25 |     sponge!(aggregate_parquets(original, incoming, output), output blabla original)?;
+   |                                                                    ^^^^^^
