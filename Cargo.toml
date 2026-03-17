@@ -12,11 +12,12 @@ description = "A Rust crate for in-place file editing with automatic renaming an
 proc-macro = true
 
 [dependencies]
-syn = { version = "~1.0", features = ["full"] }
-quote = "~1.0"
-proc-macro2 = "~1.0"
-proc-macro-error = "~1.0"
 clap = { version = "4.6.0", features = ["derive"] }
+runtime-macros = "1.1.1"
+syn = { version = "2.0.117", features = ["full"] }
+quote = "1.0.45"
+proc-macro2 = "1.0.106"
+proc-macro-error2 = "2.0.1"
 
 [dev-dependencies]
 macrotest = "1.2.1"

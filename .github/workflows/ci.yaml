@@ -17,6 +17,17 @@ jobs:
         run: cargo install --locked cargo-expand
       - name: Run tests
         run: cargo test --verbose
+      - name: Generate coverage
+        run: |
+          cargo install cargo-tarpaulin
+          cargo tarpaulin --out Xml --output-dir coverage
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./coverage/cobertura.xml
+          flags: unittests
+          fail_ci_if_error: false
   lint:
     runs-on: ubuntu-latest
     steps:

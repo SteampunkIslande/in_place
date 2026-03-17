@@ -22,7 +22,7 @@
 //! atomic replace semantics on platforms that support `std::fs::rename`.
 
 use proc_macro::TokenStream;
-use proc_macro_error::{proc_macro_error, ResultExt};
+use proc_macro_error2::{proc_macro_error, ResultExt};
 
 mod auto_rename_attribute;
 mod sponge_functionlike;

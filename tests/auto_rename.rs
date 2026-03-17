@@ -1,3 +1,5 @@
+use std::path::Path;
+
 /// Compile-tests for auto_rename attribute macro
 #[cfg(test)]
 mod auto_rename_try_build_test {
@@ -26,43 +28,37 @@ mod auto_rename_macrotest_test {
     }
 }
 
+pub fn file_edit_test(input: &Path, output: &Path) -> std::io::Result<()> {
+    use std::fs::File;
+    use std::io::{BufRead, BufReader, Write};
+    let infile = File::open(input)?;
+
+    let mut outfile = File::create(&output)?;
+
+    let reader = BufReader::new(infile);
+
+    for (i, line) in reader.lines().enumerate() {
+        let line = line?;
+        writeln!(outfile, "{}: {}", i + 1, line)?;
+    }
+    Ok(())
+}
+
 #[cfg(test)]
 mod autorename_unit_test {
+    use super::file_edit_test;
 
     use std::path::Path;
 
     use in_place_macro::auto_rename;
 
-    pub fn file_edit(input: &str, output: &str) -> std::io::Result<()> {
-        use std::fs::File;
-        use std::io::{BufRead, BufReader, Write};
-        let infile = File::open(input)?;
-
-        let mut outfile = File::create(&output)?;
-
-        let reader = BufReader::new(infile);
-
-        for (i, line) in reader.lines().enumerate() {
-            let line = line?;
-            writeln!(outfile, "{}: {}", i + 1, line)?;
-        }
-        Ok(())
+    pub fn file_edit(input: &Path, output: &Path) -> std::io::Result<()> {
+        file_edit_test(input, output)
     }
 
     #[auto_rename(output overwrites input)]
     pub fn file_edit_inplace(input: &Path, output: &Path) -> std::io::Result<()> {
-        use std::fs::File;
-        use std::io::{BufRead, BufReader, Write};
-        let infile = File::open(input)?;
-
-        let mut outfile = File::create(&output)?;
-
-        let reader = BufReader::new(infile);
-
-        for (i, line) in reader.lines().enumerate() {
-            let line = line?;
-            writeln!(outfile, "{}: {}", i + 1, line)?;
-        }
+        file_edit_test(input, output.as_ref())?;
     }
 
     fn create_temp_file_with_content(content: &str) -> tempfile::NamedTempFile {
@@ -86,7 +82,7 @@ mod autorename_unit_test {
                 .join("\n")
                 .as_str(),
         );
-        let path = temp.path().to_str().unwrap();
+        let path = temp.path();
 
         file_edit(path, path).expect("file_edit should not return an error");
 
