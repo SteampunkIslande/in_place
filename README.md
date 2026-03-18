@@ -12,6 +12,15 @@ This is the point of the [sponge](https://joeyh.name/code/moreutils/#:~:text=Pro
 
 Using this crate in rust, you now have two ways to write code that edits a file in-place.
 
+# How to install
+
+This crate is [available on crates.io](https://crates.io/crates/in_place_macro).
+You can install it by running:
+
+```bash
+cargo add in_place_macro
+```
+
 # Disclaimer
 
 This crate is **not** production-ready yet, please feel free to open an issue or a PR if you find either a bug, a solution to it, or both.
